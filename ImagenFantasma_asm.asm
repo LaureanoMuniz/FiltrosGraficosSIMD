@@ -19,14 +19,28 @@ ImagenFantasma_asm:
     ;ecx -> altura
     ;r8d -> row_size
     ;r9d -> row_size
-    ;[rbp-16] -> OFFSET x Che los levantamos en algun registro para ser mas rapido?
-    ;[rbp-24] -> OFFSET y
+    ;[rbp+16] -> OFFSET x Che los levantamos en algun registro para ser mas rapido?
+    ;[rbp+24] -> OFFSET y
     mov r8d, r8d ;limpio parte alta
-    mov r9, [rbp+OFFSET_y]
-    mov rax, [rbp+OFFSET_x]
-    shl r9, 5
-    shl rax, 5
+    
+    mov r10d, edx
+    mov eax, r8d
+    mov r9d, [rbp+OFFSET_y]
+    mul r9d
+    
+    mov eax, eax
+    shl rdx, 4
+    
+    mov r9, rax
+    add r9, rdx
+
     add r9, rdi; ii
+    
+    mov edx, r10d
+
+    mov eax, [rbp+OFFSET_x]
+    shl rax, 2
+  
     
     movdqu xmm15, [mascara] 
     movdqu xmm14, [mascara1]
@@ -108,8 +122,8 @@ ImagenFantasma_asm:
                 jmp .loopCol
         .NextFila:
         sub ecx, 2
-        mov rax, [rsp+OFFSET_x]
-        shl rax, 5
+        mov eax, [rbp+OFFSET_x]
+        shl rax, 2
         add rdi, r8
         add rsi, r8
         add r9, r8
