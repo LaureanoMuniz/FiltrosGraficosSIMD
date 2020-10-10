@@ -1,0 +1,203 @@
+% ******************************************************** %
+%              TEMPLATE DE INFORME ORGA2 v0.1              %
+% ******************************************************** %
+% ******************************************************** %
+%                                                          %
+% ALGUNOS PAQUETES REQUERIDOS (EN UBUNTU):                 %
+% ========================================
+%                                                          %
+% texlive-latex-base                                       %
+% texlive-latex-recommended                                %
+% texlive-fonts-recommended                                %
+% texlive-latex-extra?                                     %
+% texlive-lang-spanish (en ubuntu 13.10)                   %
+% ******************************************************** %
+
+
+\documentclass[a4paper]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{charter}   % tipografia
+\usepackage{graphicx}
+%\usepackage{makeidx}
+\usepackage{paralist} %itemize inline
+
+%\usepackage{float}
+%\usepackage{amsmath, amsthm, amssymb}
+%\usepackage{amsfonts}
+%\usepackage{sectsty}
+%\usepackage{charter}
+%\usepackage{wrapfig}
+%\usepackage{listings}
+%\lstset{language=C}
+
+% \setcounter{secnumdepth}{2}
+\usepackage{underscore}
+\usepackage{caratula}
+\usepackage{url}
+\usepackage{ragged2e}
+
+
+% ********************************************************* %
+% ~~~~~~~~              Code snippets             ~~~~~~~~~ %
+% ********************************************************* %
+
+\usepackage{color} % para snipets de codigo coloreados
+\usepackage{fancybox}  % para el sbox de los snipets de codigo
+
+\definecolor{litegrey}{gray}{0.94}
+
+\newenvironment{codesnippet}{%
+	\begin{Sbox}\begin{minipage}{\textwidth}\sffamily\small}%
+	{\end{minipage}\end{Sbox}%
+		\begin{center}%
+		\vspace{-0.4cm}\colorbox{litegrey}{\TheSbox}\end{center}\vspace{0.3cm}}
+
+
+
+% ********************************************************* %
+% ~~~~~~~~         Formato de las páginas         ~~~~~~~~~ %
+% ********************************************************* %
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ - #1}}
+
+\fancyhf{}
+
+\fancyhead[LO]{Sección \rightmark} % \thesection\ 
+\fancyfoot[LO]{\small{Ivo Pajor, Laureano Muñiz, Luciana Gorosito}}
+\fancyfoot[RO]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\setlength{\hoffset}{-0.8in}
+\setlength{\textwidth}{16cm}
+%\setlength{\hoffset}{-1.1cm}
+%\setlength{\textwidth}{16cm}
+\setlength{\headsep}{0.5cm}
+\setlength{\textheight}{25cm}
+\setlength{\voffset}{-0.7in}
+\setlength{\headwidth}{\textwidth}
+\setlength{\headheight}{13.1pt}
+
+\renewcommand{\baselinestretch}{1.1}  % line spacing
+
+% ******************************************************** %
+
+
+\begin{document}
+
+
+\thispagestyle{empty}
+\materia{Organización del Computador II}
+\submateria{Primer Cuatrimestre de 2019}
+\titulo{Trabajo Práctico II}
+\subtitulo{Procesamiento de imágenes (SIMD)}
+\integrante{Ivo Pajor}{460/19}{ivo_pajor@hotmail.com}
+\integrante{Luciana Gorosito}{577/18}{lugorosito0@gmail.com}
+\integrante{Laureano Muñiz}{498/19}{lau2000m@hotmail.com}
+
+\maketitle
+\newpage
+
+\thispagestyle{empty}
+\vfill
+\begin{abstract}
+En el presente trabajo se describe la problemática de ...
+\end{abstract}
+
+\thispagestyle{empty}
+\vspace{3cm}
+\tableofcontents
+\newpage
+
+
+%\normalsize
+\newpage
+
+\section{Introducción}
+
+\justify
+El objetivo de este Trabajo Práctico es analizar y comprender el modelo de procesamiento SIMD \textit{(Single Instruction, Multiple Data)} y su relación con la microarquitectura del procesador, mediante la implementación en lenguaje ensamblador de cuatro filtros gráficos: <<\textit{Imagen Fantasma}>>, <<\textit{Color Bordes}>> y <<\textit{Reforzar Brillo}>>. 
+\justify
+Más detalladamente, el filtro <<\textit{Imagen Fantasma}>> combina una imagen original con su versión en escala de grises y del doble de tamaño, generando así un  efecto de imagen fantasma sobre la imagen destino. El filtro <<\textit{Color Bordes}>> detecta los bordes de una  imagen y el filtro <<\textit{Reforzar Brillo}>> modifica el brillo de una imagen, aumentándolo en el caso de que  supere al valor del parámetro \textit{umbralSup} y disminuyéndolo en el caso de que esté por debajo del valor  del parámetro \textit{umbralInf}.
+\justify
+\indent Las implementaciones de estos filtros se realizaron utilizando el set de instrucciones \textbf{SSE} y técnicas de programación vectorial, que permitieron procesar en paralelo de 2 a 4 píxeles, dependiendo del filtro. Posterior a la implementación se realizó un análisis de rendimiento en comparación a las implementaciones en lenguaje C, provistas por la cátedra. Además, se diseñaron dos experimentos motivados en entender las posibles causas de la variación del rendimiento y la limitación de la performance de los algoritmos en el procesamiento de imágenes, que serán detallados en las secciones siguientes.  
+
+
+\section{Desarrrollo}
+
+\subsection{Implementaciones en ASM}
+\justify
+En esta sección se incluyen las descripciones de las funciones implementadas en lenguaje ensamblador.
+
+\subsubsection{Imagen Fantasma}
+\justify
+En primer lugar, se definieron en la sección \textit{section .data} los offset necesarios para obtener los parámetros que fueron pasados por la pila (offset_x y offset_y) y las máscaras a utilizar en la operatoria con los pixeles, estas son:
+\begin{itemize}
+	\item \textit{transparencia}: máscara utilizada para borrar la componente de transparencia del pixel, la misma será luego restaurada al terminar el ciclo usando la máscara \textit{sumar}.
+	\item \textit{green}: máscara utilizada para extraer la componente g del pixel, ya que es la única componente que duplica su valor al calcularse el brillo.
+	\item \textit{dividir}: máscara utilizada para completar el cálculo del brillo y la conversión a escala de grises en un mismo paso.
+	\item \textit{multiplicar}: máscara utilizada para multiplicar por 0.9 en la conversión a escala de grises.
+	
+ Previo al inicio del ciclo, se calculó el offset en bytes correspondiente al pixel de la posición src[jj][ii], del cual se obtiene el brillo. La idea principal de este algoritmo es recorrer a la imagen en submatrices de 2x2, levantando de memoria en los registros \textit{xmm1, xmm2, xmm3 y xmm4} a los pixeles que les corresponde el mismo valor de brillo, para así poder procesarlos en paralelo.
+ 
+ %acá va una imagen mostrando el levantamiento de memoria
+ 
+ Luego, en cada iteración del ciclo se realizaron los siguientes pasos:
+ 
+ \begin{enumerate}
+ 	\item Cálculo de brillo.\\
+ 	Se levantó el pixel src[jj][ii] en el registro \textit{xmm0}, extendiendo cada componente a dword, para poder relizar cálculos sin perder precisión. Además, como el cálculo del  brillo solo necesita de las componentes RGB del pixel, antes de proceder se seteó en cero a la componente A, aplicando la máscara de \textit{transparencia} antes mencionada. Seguido a esto, se extrajo en el registro \textit{xmm13} la componente G del pixel, aplicando la máscara \textit{green}. Se sumaron los registros \textit{xmm0} y \textit{xmm13}, y se realizaron dos sumas horizontales consecutivas del registro \textit{xmm0}, obteniendose en este registro el resultado de la operación:
+ 	\begin{equation}
+ 	b*4 = src[jj][ii].r + 2 * src[jj][ii].g + src[jj][ii].b 
+ 	\end{equation}
+ 	Para completar con el cálculo del brillo y con una parte de la conversión a escala de grises, se convirtió el dato a punto flotante de 32 bits y se lo dividió por 8, usando la máscara \textit{dividir}.
+ 	
+ 	\item 
+ 	
+ 	
+ 	
+ 	%xmm0  = |0|r| g |b|
+ 	%xmm13 = |0|0| g |b|
+ 	%xmm0  = |0|r|2*g|b|
+ 	
+ 	    
+ \end{enumerate}
+ 
+	
+\end{itemize}	 
+
+
+\subsubsection{Color Bordes}
+
+\subsubsection{Reforzar Brillo}
+
+
+\subsection{Comparación entre implementaciones en ASM y C}
+
+\subsection{Diseño experimental}
+
+\begin{codesnippet}
+\begin{verbatim}
+
+struct Pepe {
+
+    ...
+
+};
+
+\end{verbatim}
+\end{codesnippet}
+
+
+\section{Resultados}
+%\input{enunciado}
+
+\section{Conclusión}
+
+
+\end{document}
+
