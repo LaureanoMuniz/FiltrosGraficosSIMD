@@ -22,6 +22,7 @@
 %\usepackage{makeidx}
 \usepackage{paralist} %itemize inline
 
+
 %\usepackage{float}
 %\usepackage{amsmath, amsthm, amssymb}
 %\usepackage{amsfonts}
@@ -137,26 +138,27 @@ En esta sección se incluyen las descripciones de las funciones implementadas en
 \justify
 En primer lugar, se definieron en la sección \textit{section .data} los offset necesarios para obtener los parámetros que fueron pasados por la pila (offset_x y offset_y) y las máscaras a utilizar en la operatoria con los pixeles, estas son:
 \begin{itemize}
-	\item \textit{transparencia}: máscara utilizada para borrar la componente de transparencia del pixel, la misma será luego restaurada al terminar el ciclo usando la máscara \textit{sumar}.
-	\item \textit{green}: máscara utilizada para extraer la componente g del pixel, ya que es la única componente que duplica su valor al calcularse el brillo.
+	\item \textit{transparencia}: máscara utilizada para borrar la componente de transparencia del pixel, la misma fue luego restaurada al terminar el ciclo usando la máscara \textit{sumar}.
+	\item \textit{green}: máscara utilizada para extraer la componente G del pixel, ya que es la única componente que duplica su valor al calcularse el brillo.
 	\item \textit{dividir}: máscara utilizada para completar el cálculo del brillo y la conversión a escala de grises en un mismo paso.
 	\item \textit{multiplicar}: máscara utilizada para multiplicar por 0.9 en la conversión a escala de grises.
 	
- Previo al inicio del ciclo, se calculó el offset en bytes correspondiente al pixel de la posición src[jj][ii], del cual se obtiene el brillo. La idea principal de este algoritmo es recorrer a la imagen en submatrices de 2x2, levantando de memoria en los registros \textit{xmm1, xmm2, xmm3 y xmm4} a los pixeles que les corresponde el mismo valor de brillo, para así poder procesarlos en paralelo.
+ Previo al inicio del ciclo, se calculó el offset en bytes correspondiente al pixel de la posición (jj,ii) de la imagen Fuente, del cual se obtiene el brillo. La idea principal de este algoritmo es recorrer a la imagen en submatrices de 2x2, levantando de memoria en los registros \textit{xmm1, xmm2, xmm3 y xmm4} a los pixeles que les corresponde el mismo valor de brillo, para así poder procesarlos en paralelo.
  
  %acá va una imagen mostrando el levantamiento de memoria
  
- Luego, en cada iteración del ciclo se realizaron los siguientes pasos:
+ Más específicamente, en cada iteración del ciclo se realizaron los siguientes pasos:
  
  \begin{enumerate}
- 	\item Cálculo de brillo.\\
+ 	\item \textbf{Cálculo de brillo}\\
  	Se levantó el pixel src[jj][ii] en el registro \textit{xmm0}, extendiendo cada componente a dword, para poder relizar cálculos sin perder precisión. Además, como el cálculo del  brillo solo necesita de las componentes RGB del pixel, antes de proceder se seteó en cero a la componente A, aplicando la máscara de \textit{transparencia} antes mencionada. Seguido a esto, se extrajo en el registro \textit{xmm13} la componente G del pixel, aplicando la máscara \textit{green}. Se sumaron los registros \textit{xmm0} y \textit{xmm13}, y se realizaron dos sumas horizontales consecutivas del registro \textit{xmm0}, obteniendose en este registro el resultado de la operación:
  	\begin{equation}
  	b*4 = src[jj][ii].r + 2 * src[jj][ii].g + src[jj][ii].b 
  	\end{equation}
- 	Para completar con el cálculo del brillo y con una parte de la conversión a escala de grises, se convirtió el dato a punto flotante de 32 bits y se lo dividió por 8, usando la máscara \textit{dividir}.
+ 	Para completar el cálculo del brillo y una parte de la conversión a escala de grises, se convirtió el dato a punto flotante de 32 bits y se lo dividió por 8, usando la máscara \textit{dividir}.
  	
- 	\item 
+ 	\item \textbf{Conversión a escala de grises}\\
+ 	
  	
  	
  	
@@ -172,7 +174,59 @@ En primer lugar, se definieron en la sección \textit{section .data} los offset 
 
 
 \subsubsection{Color Bordes}
+Se definieron en la sección \textit{section .data} las siguientes máscaras:
 
+\begin{itemize}
+	\item \textit{blanco}: máscara utilizada para colorear de blanco los bordes de la imagen destino.
+	\item \textit{transparencias1}: máscara utilizada para restaurar la transparencia de un pixel.
+	\item \textit{transparencias2}: máscara utilizada para filtrar la componente de transparencia de un pixel.	
+\end{itemize}	
+\justify
+y, antes de comenzar el ciclo, fueron guardadas en los registros \textit{xmm15, xmm14 y xmm13}, respectivamente.
+
+
+\justify
+El algoritmo consta de dos ciclos cortos (\textit{".bordesPrimeraFila"} y \textit{".bordesUltimaFila"}) que arman los bordes blancos horizontales de la imagen destino, un \textit{"preciclo"}, que actualiza las variables antes de ingresar a los otros dos ciclos (\textit{".cicloFilas"} y \textit{".cicloColumnas"}) que recorren la imagen Fuente realizando la operatoria de detección de bordes y armando los bordes verticales blancos de la imagen destino. A continuación se detallan las operaciones que se realizan en cada parte.
+
+\begin{itemize}
+	\item \textbf{.bordesPrimeraFila}\\
+	 En cada iteración del ciclo se escriben 16 bytes de la imagen destino con el valor de 255( correspondiente al blanco), usando la máscara previamente guardada en el registro \textit{xmm15}. Como se escriben cuatro píxeles de manera simultánea en cada iteración, el registro contador \textbf{edx} fue inicializado en el valor de $\#\frac{columnas}{4}$ y, para compensar el factor multiplicativo que le falta a la escala, el registro índice \textbf{r9d} fue incrementado en 2 unidades cada iteración.  
+	
+	\item \textbf{.preciclo}\\
+	Se guarda en \textbf{rdi} la dirección efectiva a la posición (1,1) de la imagen fuente y se guarda en \textbf{rsi} la dirección efectiva a la posición (1,0) de la imagen destino. Además, se decrementa el valor del registro contador de filas \textbf{ecx}, porque la primera fila ya fue pintada de blanco en el primer ciclo de bordes.  
+	
+	\item \textbf{.cicloFila y .cicloColumnas}\\
+	El ciclo externo (.cicloFilas) recorre a las imagenes fuente y destino por filas, empezando desde la primera. La guarda del ciclo compara a \textbf{edx} (registro contador de filas) con 1, por el margen de un pixel que debe dejarse y que es pintando de blanco en la imagen destino durante el último ciclo de bordes. Cada vez que se ingresa al ciclo de las filas, se pinta de blanco el primer pixel de la imagen destino y se avanza un pixel en la misma. De esta manera se va generando el margen vertical izquierdo esa imagen. Además, antes de ingresar al ciclo interno, se resetea el contador de columnas \textbf{eax}. El valor del contador es $\#\frac{columnas-2}{2}$, ya que los pixeles de la primera y última columna de la imagen fuente no se procesan y 
+	el resto de la operatoria se hace procesando de a 2 pixeles.\\
+	En cada iteración del ciclo interno (.cicloColumnas) se levantan de memoria los seis pixeles necesarios para procesar los pixeles de la posición [rdi] y [rdi + 4]. Se levantan dos pixeles por registro, extendiendo las componentes de cada pixel de byte a word, quedando así 2 pixeles por registro xmm. Se limpia el registro xmm6, que es usado como registro contador y se reservan en otros registros los pixeles necesarios para calcular las diferencias verticales.
+	\begin{center}
+		\includegraphics[scale=0.6]{img/LevColorBordes.pdf}
+	\end{center}
+	
+	Para calcular las diferencias horizontales, se restan los registros correspondientes a una misma fila y luego se toma absoluto. El resultado de cada diferencia calculada se suma al registro xmm6, acumulándose en la parte alta la suma de diferencias horizontales para el pixel de la posición [rdi + 4] (pixel 6 en el ejemplo) y en la parte baja la suma de diferencias horizontales para el pixel de la posición [rdi] (p5 en el ejemplo).
+	
+	\begin{center}
+		\includegraphics[scale=0.6]{img/sumHorizontalColorBordes.pdf}
+	\end{center}
+
+	Para calcular las diferencias verticales, se restan los registros correspondientes al mismo par de columnas, se toma absoluto y se suman a xmm6. En este caso, las diferencias verticales de las columnas 2 y 3 deben ser sumadas tanto a la parte alta como a la parte baja del registro xmm6, por lo que es necesario reordenar los resultados para sumar los valores que faltan. \\
+	El siguiente esquema muestra graficamente la operatoria realizada para obtener las sumas de las diferencias verticales:
+	
+	\begin{center}
+		\includegraphics[scale=0.6]{img/sumVerticalesColorBordes.pdf}
+	\end{center}
+	   
+	Luego de acumular en xmm6 las sumas de las diferencias horizontales y verticales, se empaqueta el registro para convertir devuelta a byte y se arreglan las transparencias usando las máscaras destinadas a esto. Hecho esto, se mueven los resultados de los dos pixeles procesados a la imagen destino y se actualizan los índices sumando 8 bytes a rdi y a rsi.
+	
+	Antes de avanzar de fila, se pinta de blanco el último pixel de la matriz destino, de esta manera se arma el margen vertical derecho de la imagen destino.
+	\item \textbf{.bordesUltimaFila}\\
+	Este ciclo realiza la misma operatoria que .bordesPrimeraFila, pero usa como registro contador a \textbf{r10d} y como registro índice a \textbf{edx}, que terminó con el valor 0 luego del primer ciclo bordes.
+\end{itemize}
+	
+
+
+
+   
 \subsubsection{Reforzar Brillo}
 
 
@@ -180,17 +234,6 @@ En primer lugar, se definieron en la sección \textit{section .data} los offset 
 
 \subsection{Diseño experimental}
 
-\begin{codesnippet}
-\begin{verbatim}
-
-struct Pepe {
-
-    ...
-
-};
-
-\end{verbatim}
-\end{codesnippet}
 
 
 \section{Resultados}
