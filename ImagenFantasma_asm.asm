@@ -9,7 +9,7 @@ transparencia: DD -1, -1, -1, 0
 green: DD 0, -1, 0, 0
 sumar: DB 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255
 dividir: DD 8.0, 8.0, 8.0, 8.0
-multiplicar: DD 0.9, 0.9, 0.9, 0.9
+multiplicar: DW 29, 29, 29, 29, 29, 29, 29, 29
 
 section .text
 ImagenFantasma_asm:
@@ -84,54 +84,43 @@ ImagenFantasma_asm:
                 phaddd xmm0, xmm0
                 phaddd xmm0, xmm0       ; b = (rrr + 2 * ggg + bbb);
 
-                ; convierto a float
-                cvtdq2ps xmm0, xmm0     ; [ (float)brillo | ... | ... | ... ]
+                ; convierto a word
+                packusdw xmm0, xmm0     ; [ (rrr + 2 * ggg + bbb) | ... | ... | ... | ... | ... | ... | ... ]
                 ; divido por 4 y 2 (divido por 8)
-                divps xmm0, xmm10       ; [ (float)brillo/2 | ... | ... | ... ]
+                psrlw xmm0, 3       ; [ brillo/2 | ... | ... | ... | ... | ... | ... | ... ]
 
                 ;(3) Levanto pixeles que tendrán igual brillo extendiendo a dword y opero
-                pmovzxbd xmm1, [rdi]        ; [p0]
-                pmovzxbd xmm2, [rdi+4]      ; [p1]
-                pmovzxbd xmm3, [rdi+r8]     ; [p4]
-                pmovzxbd xmm4, [rdi+r8+4]   ; [p5]
+                pmovzxbw xmm1, [rdi]        ; [ p1 | p0 ]
+                pmovzxbw xmm2, [rdi+r8]     ; [ p5 | p4 ]
 
-                ; convierto a float
-                cvtdq2ps xmm1, xmm1         ; [(float)p0]
-                cvtdq2ps xmm2, xmm2         ; [(float)p1]
-                cvtdq2ps xmm3, xmm3         ; [(float)p4]
-                cvtdq2ps xmm4, xmm4         ; [(float)p5]
+                ; multiplico por 29 WARNING!!!
 
-                ; multiplico por 0.9
-                mulps xmm1, xmm11           ; [(float)p0*0.9]
-                mulps xmm2, xmm11           ; [(float)p1*0.9]
-                mulps xmm3, xmm11           ; [(float)p4*0.9]
-                mulps xmm4, xmm11           ; [(float)p5*0.9]
+                pmullw xmm1, xmm11          ; [ p1*29 | p0*29 ]
+                pmullw xmm2, xmm11          ; [ p5*29 | p4*29 ]
+                
+                ; divido por 32
+                
+                psrlw xmm1, 5               ; [ (p1*29)/32 | (p0*29)/32 ]
+                psrlw xmm2, 5               ; [ (p5*29)/32 | (p4*29)/32 ]
 
                 ; sumo brillo/2
-                addps xmm1, xmm0            ; [(float)p0*0.9 + b/2]
-                addps xmm2, xmm0            ; [(float)p1*0.9 + b/2]
-                addps xmm3, xmm0            ; [(float)p4*0.9 + b/2]
-                addps xmm4, xmm0            ; [(float)p5*0.9 + b/2]
                 
-                ; convierto a int truncando
-                cvttps2dq xmm1, xmm1         ; [(float)p0*0.9 + b/2] -> int
-                cvttps2dq xmm2, xmm2         ; [(float)p1*0.9 + b/2] -> int
-                cvttps2dq xmm3, xmm3         ; [(float)p4*0.9 + b/2] -> int
-                cvttps2dq xmm4, xmm4         ; [(float)p5*0.9 + b/2] -> int
+                paddusw xmm1, xmm0          ; [ (p1*29)/32 + b/2 | (p0*29)/32 + b/2 ]
+                paddusw xmm2, xmm0          ; [ (p5*29)/32 + b/2 | (p4*29)/32 + b/2 ]
+                
                 ; empaqueto
-                packusdw xmm1, xmm2          ; [(int)p0*0.9 + b/2, (int)p1*0.9 + b/2]
-                packusdw xmm3, xmm4          ; [(int)p4*0.9 + b/2, (int)p5*0.9 + b/2]
-
-                packuswb xmm1, xmm1          ; [(int)p0*0.9 + b/2,(int)p1*0.9 + b/2,(int)p0*0.9 + b/2,(int)p1*0.9 + b/2]
-                packuswb xmm3, xmm4          ; [(int)p4*0.9 + b/2,(int)p5*0.9 + b/2,(int)p4*0.9 + b/2,(int)p5*0.9 + b/2]
+                
+                packuswb xmm1, xmm1          ; [ p1*0.9 + b/2, p0*0.9 + b/2, p1*0.9 + b/2, p0*0.9 + b/2 ]
+                packuswb xmm2, xmm2          ; [ p5*0.9 + b/2, p4*0.9 + b/2, p5*0.9 + b/2, p4*0.9 + b/2 ]
                 
                 ; arreglo transparencia
+                
                 paddusb xmm1, xmm12
-                paddusb xmm3, xmm12
+                paddusb xmm2, xmm12
 
                 ;(4) Muevo resultado a dst[j][i]
                 movq [rsi], xmm1
-                movq [rsi+r8], xmm3
+                movq [rsi+r8], xmm2
 
                 ;(5) Actualizo direcciones e índices
                 add rdi, 8 
