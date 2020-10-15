@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.4.26)  10 OCT 2020 19:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.9.9)  15 OCT 2020 16:42
 entering extended mode
 **./informe.tex
 (informe.tex
 LaTeX2e <2020-02-02> patch level 5
-L3 programming layer <2020-04-06>
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
+L3 programming layer <2020-06-18>
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls"
 Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size10.clo"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo"
 File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 )
 \c@part=\count167
@@ -20,75 +20,79 @@ File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen134
-)
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\babel.sty"
-Package: babel 2020/03/22 3.42 The Babel package
+) ("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.st
+y"
+Package: babel 2020/06/10 3.45 The Babel package
+ ("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.def
+"
+File: babel.def 2020/06/10 3.45 Babel common definitions
+\babel@savecnt=\count175
+\U@D=\dimen135
+\l@babelnohyphens=\language79
 
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\switch.def"
-File: switch.def 2020/03/22 3.42 Babel switching mechanism
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.d
+ef")
+\bbl@readstream=\read2
 )
+\bbl@dirlevel=\count176
+
 *************************************
 * Local config file bblopts.cfg used
 *
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/arabi\bblopts.cfg"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/arabi\bblopts.cfg"
 File: bblopts.cfg 2005/09/08 v0.1 add Arabic and Farsi to "declared" options of
  babel
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/babel-spanish\spanish
-.ldf"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/babel-spanish\span
+ish.ldf"
 Language: spanish.ldf 2016/03/03 v5.0p Spanish support from the babel system
-
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\babel.def"
-File: babel.def 2020/03/22 3.42 Babel common definitions
-\babel@savecnt=\count175
-\U@D=\dimen135
-
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\txtbabel.def"
-)
-\bbl@readstream=\read2
-\bbl@dirlevel=\count176
-)
 \es@quottoks=\toks15
 \es@quotdepth=\count177
 Package babel Info: Making " an active character on input line 561.
 Package babel Info: Making . an active character on input line 662.
 Package babel Info: Making < an active character on input line 707.
 Package babel Info: Making > an active character on input line 707.
-)) ("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\inputenc.sty"
+))
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty"
 Package: inputenc 2018/08/11 v1.3c Input encoding file
 \inpenc@prehook=\toks16
 \inpenc@posthook=\toks17
-) ("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/psnfss\charter.sty"
+)
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\charter.sty
+"
 Package: charter 2020/03/25 PSNFSS-v9.3 (P.Dyballa) 
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphicx.sty
-"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.
+sty"
 Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
- ("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\keyval.sty"
+
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.st
+y"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks18
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphics.sty
-"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.
+sty"
 Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
- ("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\trig.sty"
+
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty"
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\graphics
-.cfg"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graph
+ics.cfg"
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 105.
 
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def\pdftex.d
-ef"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdfte
+x.def"
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen136
 \Gin@req@width=\dimen137
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/paralist\paralist.sty
-"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/paralist\paralist.
+sty"
 Package: paralist 2017/01/22 v2.7 Extended list environments
 \pltopsep=\skip49
 \plpartopsep=\skip50
@@ -96,8 +100,8 @@ Package: paralist 2017/01/22 v2.7 Extended list environments
 \plparsep=\skip52
 \pl@lab=\toks19
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/underscore\underscore
-.sty"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/underscore\undersc
+ore.sty"
 Package: underscore 2006/09/13
 LaTeX Info: Redefining \_ on input line 42.
 ) (caratula.sty
@@ -105,14 +109,15 @@ Package: caratula 2005/08/09 v0.3 Para componer caratulas de TPs del DC
 
 Cargando package 'caratula' v0.3 (2005/08/09)
 \intlist=\toks20
-) ("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/url\url.sty"
+) ("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty"
 \Urlmuskip=\muskip16
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ragged2e\ragged2e.sty
-"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/ragged2e\ragged2e.
+sty"
 Package: ragged2e 2019/07/28 v2.2 ragged2e Package (MS)
- ("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ms\everysel.sty"
+
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/ms\everysel.sty"
 Package: everysel 2011/10/28 v1.2 EverySelectfont Package (MS)
 )
 \CenteringLeftskip=\skip53
@@ -129,18 +134,18 @@ Package: everysel 2011/10/28 v1.2 EverySelectfont Package (MS)
 \RaggedLeftParindent=\skip64
 \RaggedRightParindent=\skip65
 \JustifyingParindent=\skip66
-)
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\color.sty"
+) ("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.s
+ty"
 Package: color 2019/11/23 v1.2a Standard LaTeX Color (DPC)
 
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\color.cf
-g"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color
+.cfg"
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 147.
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fancybox\fancybox.sty
-"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/fancybox\fancybox.
+sty"
 Package: fancybox 2010/05/15 1.4
 
 Style option: `fancybox' v1.4 <2010/05/15> (tvz)
@@ -154,8 +159,8 @@ Style option: `fancybox' v1.4 <2010/05/15> (tvz)
 \Verbatim@Outfile=\write3
 \Verbatim@Infile=\read3
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fancyhdr\fancyhdr.sty
-"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.
+sty"
 Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
 s
 \f@nch@headwidth=\skip67
@@ -168,42 +173,42 @@ s
 \f@nch@O@olf=\skip74
 \f@nch@O@orf=\skip75
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3backend\l3backend-p
-dfmode.def"
-File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backen
+d-pdfmode.def"
+File: l3backend-pdfmode.def 2020-06-29 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count178
 \l__pdf_internal_box=\box47
 ) (informe.aux
-LaTeX Info: Redefining \. on input line 8.
-LaTeX Info: Redefining \% on input line 8.
+LaTeX Info: Redefining \. on input line 9.
+LaTeX Info: Redefining \% on input line 9.
 )
 \openout1 = `informe.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
 LaTeX Font Info:    Trying to load font information for OT1+bch on input line 9
-0.
+1.
 
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/psnfss\ot1bch.fd"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1bch.fd"
 File: ot1bch.fd 2004/10/18 font definitions for OT1/bch.
 )
-LaTeX Info: Redefining \. on input line 90.
-LaTeX Info: Redefining \% on input line 90.
+LaTeX Info: Redefining \. on input line 91.
+LaTeX Info: Redefining \% on input line 91.
 
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.
-mkii"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-p
+df.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count179
 \scratchdimen=\dimen139
@@ -217,41 +222,41 @@ mkii"
 \makeMPintoPDFobject=\count184
 \everyMPtoPDFconversion=\toks26
 )
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/epstopdf-pkg\epstopdf
--base.sty"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epsto
+pdf-base.sty"
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
 ) ABD: EverySelectfont initializing macros
-LaTeX Info: Redefining \selectfont on input line 90.
+LaTeX Info: Redefining \selectfont on input line 91.
 <img/logodc.jpg, id=1, 215.6055pt x 83.5923pt>
 File: img/logodc.jpg Graphic file (type jpg)
 <use img/logodc.jpg>
-Package pdftex.def Info: img/logodc.jpg  used on input line 102.
+Package pdftex.def Info: img/logodc.jpg  used on input line 103.
 (pdftex.def)             Requested size: 215.60497pt x 83.59207pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 102.
+(Font)              <7> on input line 103.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 102.
+(Font)              <5> on input line 103.
 <img/logouba.jpg, id=2, 225.4824pt x 231.7458pt>
 File: img/logouba.jpg Graphic file (type jpg)
 <use img/logouba.jpg>
-Package pdftex.def Info: img/logouba.jpg  used on input line 102.
+Package pdftex.def Info: img/logouba.jpg  used on input line 103.
 (pdftex.def)             Requested size: 225.48184pt x 231.74522pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 102--102
+Underfull \hbox (badness 10000) in paragraph at lines 103--103
 
  []
 
 
-Overfull \hbox (22.76358pt too wide) in paragraph at lines 102--102
+Overfull \hbox (22.76358pt too wide) in paragraph at lines 103--103
 [][][] 
  []
 
 [1
 
-{C:/Users/Lu/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./img/logodc.j
-pg> <./img/logouba.jpg>] (informe.toc
+{C:/Users/Ivo Pajor/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./img/logod
+c.jpg> <./img/logouba.jpg>] (informe.toc
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 )
@@ -260,50 +265,90 @@ LaTeX Info: Redefining \% on input line 1.
 
  [2]
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 12
-3.
+4.
 
-("C:\Users\Lu\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ulasy.fd"
+("C:\Users\Ivo Pajor\AppData\Local\Programs\MiKTeX\tex/latex/base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Info: Redefining \. on input line 158.
-LaTeX Info: Redefining \% on input line 158.
+LaTeX Info: Redefining \. on input line 159.
+LaTeX Info: Redefining \% on input line 159.
 
 [3]
-Overfull \hbox (6.0pt too wide) in paragraph at lines 193--193
- [][][][][][] 
+Underfull \hbox (badness 10000) in paragraph at lines 160--161
+
  []
 
-LaTeX Info: Redefining \. on input line 202.
-LaTeX Info: Redefining \% on input line 202.
-[4] (informe.aux
-LaTeX Info: Redefining \. on input line 8.
-LaTeX Info: Redefining \% on input line 8.
+LaTeX Info: Redefining \. on input line 203.
+LaTeX Info: Redefining \% on input line 203.
+[4]
+<img/LevColorBordes.pdf, id=29, 638.385pt x 374.3586pt>
+File: img/LevColorBordes.pdf Graphic file (type pdf)
+<use img/LevColorBordes.pdf>
+Package pdftex.def Info: img/LevColorBordes.pdf  used on input line 204.
+(pdftex.def)             Requested size: 383.03394pt x 224.61688pt.
+<img/sumHorizontalColorBordes.pdf, id=30, 555.03355pt x 385.44pt>
+File: img/sumHorizontalColorBordes.pdf Graphic file (type pdf)
+<use img/sumHorizontalColorBordes.pdf>
+Package pdftex.def Info: img/sumHorizontalColorBordes.pdf  used on input line 2
+10.
+(pdftex.def)             Requested size: 333.0227pt x 231.26578pt.
+<img/sumVerticalesColorBordes.pdf, id=31, 542.025pt x 364.48169pt>
+File: img/sumVerticalesColorBordes.pdf Graphic file (type pdf)
+<use img/sumVerticalesColorBordes.pdf>
+Package pdftex.def Info: img/sumVerticalesColorBordes.pdf  used on input line 2
+17.
+(pdftex.def)             Requested size: 325.2175pt x 218.69069pt.
+LaTeX Info: Redefining \. on input line 218.
+LaTeX Info: Redefining \% on input line 218.
+ [5 <./img/LevColorBordes.pdf
+
+pdfTeX warning: pdflatex.exe (file ./img/LevColorBordes.pdf): PDF inclusion: in
+valid other resource which is no dict (key 'ProcSets', type <array>); ignored.
+> <./img/sumHorizontalColorBordes.pdf
+
+pdfTeX warning: pdflatex.exe (file ./img/sumHorizontalColorBordes.pdf): PDF inc
+lusion: invalid other resource which is no dict (key 'ProcSets', type <array>);
+ ignored.
+>]
+LaTeX Info: Redefining \. on input line 246.
+LaTeX Info: Redefining \% on input line 246.
+ [6 <./img/sumVerticalesColorBordes.pdf
+
+pdfTeX warning: pdflatex.exe (file ./img/sumVerticalesColorBordes.pdf): PDF inc
+lusion: invalid other resource which is no dict (key 'ProcSets', type <array>);
+ ignored.
+>] (informe.aux
+LaTeX Info: Redefining \. on input line 9.
+LaTeX Info: Redefining \% on input line 9.
 ) ) 
 Here is how much of TeX's memory you used:
- 2977 strings out of 480930
- 43755 string characters out of 2901168
- 297535 words of memory out of 3000000
- 18805 multiletter control sequences out of 15000+200000
- 552695 words of font info for 51 fonts, out of 3000000 for 9000
+ 3084 strings out of 480790
+ 45754 string characters out of 2895392
+ 303250 words of memory out of 3000000
+ 19053 multiletter control sequences out of 15000+200000
+ 552222 words of font info for 49 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 31i,12n,45p,712b,522s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<
-C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/bitstrea/charter/bchb
-8a.pfb><C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/bitstrea/char
-ter/bchr8a.pfb><C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/bitst
-rea/charter/bchri8a.pfb><C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Lu/AppData/Local/Programs/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/Lu/AppData/Local
-/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/Lu/A
-ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/
-Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt1
-0.pfb><C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmtt9.pfb><C:/Users/Lu/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publi
-c/amsfonts/latxfont/lasy10.pfb>
-Output written on informe.pdf (4 pages, 487806 bytes).
+ 32i,12n,45p,795b,527s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Users/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.en
+c}<C:/Users/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts/type1/bitstrea/charte
+r/bchb8a.pfb><C:/Users/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts/type1/bits
+trea/charter/bchr8a.pfb><C:/Users/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts
+/type1/bitstrea/charter/bchri8a.pfb><C:/Users/Ivo Pajor/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Ivo Pajor/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Ivo Pajo
+r/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Us
+ers/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7
+.pfb><C:/Users/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmss10.pfb><C:/Users/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmssbx10.pfb><C:/Users/Ivo Pajor/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Ivo Pajor/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Ivo Pajor/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/User
+s/Ivo Pajor/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/latxfont/
+lasy10.pfb>
+Output written on informe.pdf (6 pages, 745941 bytes).
 PDF statistics:
- 62 PDF objects out of 1000 (max. 8388607)
+ 203 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

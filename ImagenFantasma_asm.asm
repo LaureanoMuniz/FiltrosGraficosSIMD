@@ -8,7 +8,6 @@ section .data
 transparencia: DD -1, -1, -1, 0
 green: DD 0, -1, 0, 0
 sumar: DB 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255
-dividir: DD 8.0, 8.0, 8.0, 8.0
 multiplicar: DW 29, 29, 29, 29, 29, 29, 29, 29
 
 section .text
@@ -51,7 +50,6 @@ ImagenFantasma_asm:
     ; levanto máscaras de memoria
     movdqu xmm15, [transparencia] 
     movdqu xmm14, [green]
-    movdqu xmm10, [dividir]
     movdqu xmm11, [multiplicar]
     movdqu xmm12, [sumar]
     
@@ -110,8 +108,8 @@ ImagenFantasma_asm:
                 
                 ; empaqueto
                 
-                packuswb xmm1, xmm1          ; [ p1*0.9 + b/2, p0*0.9 + b/2, p1*0.9 + b/2, p0*0.9 + b/2 ]
-                packuswb xmm2, xmm2          ; [ p5*0.9 + b/2, p4*0.9 + b/2, p5*0.9 + b/2, p4*0.9 + b/2 ]
+                packuswb xmm1, xmm1          ; [ (p1*29)/32 + b/2, (p0*29)/32 + b/2, (p1*29)/32 + b/2, (p0*29)/32 + b/2 ]
+                packuswb xmm2, xmm2          ; [ (p5*29)/32 + b/2, (p4*29)/32 + b/2, (p5*29)/32 + b/2, (p4*29)/32 + b/2 ]
                 
                 ; arreglo transparencia
                 
