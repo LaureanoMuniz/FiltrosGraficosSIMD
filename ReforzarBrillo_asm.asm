@@ -3,7 +3,6 @@ global ReforzarBrillo_asm
 transparencia: DB -1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,0
 green: DB 0,-1,0,0,0,-1,0,0,0,-1,0,0,0,-1,0,0
 fix: DB 0,0,0,-1,0,0,0,-1,0,0,0,-1,0,0,0,-1
-saturar: DW 32767,32767,32767,32767,32767,32767,32767,32767
 ReforzarBrillo_asm:
     push rbp
     mov rbp, rsp
@@ -20,7 +19,7 @@ ReforzarBrillo_asm:
     movdqu xmm15, [transparencia]
     movdqu xmm14, [green]
     movdqu xmm9, [fix]
-    movdqu xmm8, [saturar]
+    
     movd xmm13, [rbp+16] ;umbralSup
     movd xmm12, [rbp+24] ;umbralInf
     movd xmm11, [rbp+32] ;brilloSup
@@ -35,10 +34,8 @@ ReforzarBrillo_asm:
 
     ;saturar brillos
     packusdw xmm11, xmm11       ;[bs,bs,bs,bs,bs,bs,bs,bs]
-    pand xmm11, xmm8
     packuswb xmm11, xmm11       ;[bs,bs,bs,bs,bs,bs,bs,bs,bs,bs,bs,bs,bs,bs,bs,bs]   
     packusdw xmm10, xmm10       ;[bi,bi,bi,bi,bi,bi,bi,bi]
-    pand xmm10, xmm8
     packuswb xmm10, xmm10       ;[bi,bi,bi,bi,bi,bi,bi,bi,bi,bi,bi,bi,bi,bi,bi,bi]
 
     mov eax,edx
