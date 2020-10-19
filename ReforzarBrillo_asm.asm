@@ -47,7 +47,6 @@ ReforzarBrillo_asm:
             je .finCol
             ;levantar
             movdqu xmm4, [rdi]    ; xmm4 = [a3,r3,g3,b3,a2,r2,g2,b2,a1,r1,g1,b1,a0,r0,g0,b0]
-            pmovzxbw xmm5, [rsi]  ; xmm5 = []
             ;limpiar transparencia
             pand xmm4, xmm15        ; xmm4 = [0,r3,g3,b3,0,r2,g2,b2,0,r1,g1,b1,0,r0,g0,b0]
             
