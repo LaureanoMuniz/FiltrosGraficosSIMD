@@ -136,14 +136,14 @@ En esta sección se incluyen las descripciones de las funciones implementadas en
 
 \subsubsection{Imagen Fantasma}
 \justify
-En primer lugar, se definieron en la sección \textit{section .data} los offset necesarios para obtener los parámetros que fueron pasados por la pila (offset_x y offset_y) y las máscaras a utilizar en la operatoria con los pixeles, estas son:
+En primer lugar, se definieron en la sección \textit{section .data} los offset necesarios para obtener los parámetros que fueron pasados por la pila (offset_x y offset_y) y las máscaras a utilizar en la operatoria con los píxeles, estas son:
 \begin{itemize}
-	\item \textit{transparencia}: máscara utilizada para borrar la componente de transparencia del pixel, la misma fue luego restaurada al terminar el ciclo usando la máscara \textit{sumar}.
-	\item \textit{green}: máscara utilizada para extraer la componente G del pixel, ya que es la única componente que duplica su valor al calcularse el brillo.
+	\item \textit{transparencia}: máscara utilizada para borrar la componente de transparencia del píxel, la misma fue luego restaurada al terminar el ciclo usando la máscara \textit{sumar}.
+	\item \textit{green}: máscara utilizada para extraer la componente G del píxel, ya que es la única componente que duplica su valor al calcularse el brillo.
 	\item \textit{multiplicar}: máscara utilizada para multiplicar por $29$, ya que $\frac{29}{32} \cong $ 0.9, en la conversión a escala de grises.
 	\item \textit{sumar}: máscara utilizada para arreglar las transparencias de los píxeles al finalizar los cálculos.
 	
- Previo al inicio del ciclo, se calculó el offset en bytes correspondiente al pixel de la posición (jj,ii) de la imagen Fuente, del cual se obtiene el brillo. La idea principal de este algoritmo es recorrer a la imagen en submatrices de 2x2, levantando de memoria en los registros \textit{xmm1 y xmm2}  los pixeles que les corresponde el mismo valor de brillo, para así poder procesarlos en paralelo.
+ Previo al inicio del ciclo, se calculó el offset en bytes correspondiente al píxel de la posición (jj,ii) de la imagen Fuente, del cual se obtiene el brillo. La idea principal de este algoritmo es recorrer a la imagen en submatrices de 2x2, levantando de memoria en los registros \textit{xmm1 y xmm2}  los píxeles que les corresponde el mismo valor de brillo, para así poder procesarlos en paralelo.
  
  %acá va una imagen mostrando el levantamiento de memoria
  
@@ -199,7 +199,7 @@ El algoritmo consta de dos ciclos cortos (\textit{".bordesPrimeraFila"} y \texti
 	\item \textbf{.cicloFila y .cicloColumnas}\\
 	El ciclo externo (.cicloFilas) recorre a las imágenes fuente y destino por filas, empezando desde la primera. La guarda del ciclo compara a \textbf{edx} (registro contador de filas) con 1, por el margen de un píxel que debe dejarse y que es pintando de blanco en la imagen destino durante el último ciclo de bordes. Cada vez que se ingresa al ciclo de las filas, se pinta de blanco el primer píxel de la imagen destino y se avanza un píxel en la misma. De esta manera se va generando el margen vertical izquierdo esa imagen. Además, antes de ingresar al ciclo interno, se resetea el contador de columnas \textbf{eax}. El valor del contador es $\#\frac{columnas-2}{2}$, ya que los píxeles de la primera y última columna de la imagen fuente no se procesan y 
 	el resto de la operatoria se hace procesando de a 2 píxeles.\\
-	En cada iteración del ciclo interno (.cicloColumnas) se levantan de memoria los seis píxeles necesarios para procesar los pixeles de la posición [rdi] y [rdi + 4]. Se levantan dos píxeles por registro, extendiendo las componentes de cada píxel de byte a word, quedando así 2 pixeles por registro xmm. Se limpia el registro xmm6, que es usado como registro acumulador y se reservan en otros registros los píxeles necesarios para calcular las diferencias verticales.
+	En cada iteración del ciclo interno (.cicloColumnas) se levantan de memoria los seis píxeles necesarios para procesar los píxeles de la posición [rdi] y [rdi + 4]. Se levantan dos píxeles por registro, extendiendo las componentes de cada píxel de byte a word, quedando así 2 píxeles por registro xmm. Se limpia el registro xmm6, que es usado como registro acumulador y se reservan en otros registros los píxeles necesarios para calcular las diferencias verticales.
 	\begin{center}
 		\includegraphics[scale=0.6]{img/LevColorBordes.pdf}
 	\end{center}
@@ -219,7 +219,7 @@ El algoritmo consta de dos ciclos cortos (\textit{".bordesPrimeraFila"} y \texti
 	   
 	Luego de acumular en xmm6 las sumas de las diferencias horizontales y verticales, se empaqueta el registro para convertir devuelta a byte y se arreglan las transparencias usando las máscaras destinadas a esto. Hecho esto, se mueven los resultados de los dos píxeles procesados a la imagen destino y se actualizan los índices sumando 8 bytes a rdi y a rsi.
 	
-	Antes de avanzar de fila, se pinta de blanco el último pixel de la matriz destino, de esta manera se arma el margen vertical derecho de la imagen destino.
+	Antes de avanzar de fila, se pinta de blanco el último píxel de la matriz destino, de esta manera se arma el margen vertical derecho de la imagen destino.
 	\item \textbf{.bordesUltimaFila}\\
 	Este ciclo realiza la misma operatoria que .bordesPrimeraFila, pero usa como registro contador a \textbf{r10d} y como registro índice a \textbf{edx}, que terminó con el valor 0 luego del primer ciclo bordes.
 \end{itemize}
@@ -230,6 +230,46 @@ El algoritmo consta de dos ciclos cortos (\textit{".bordesPrimeraFila"} y \texti
    
 \subsubsection{Reforzar Brillo}
 
+\justify
+Nuevamente se definieron en primer lugar las máscaras a utilizar en la operatoria con los píxeles, estas son:
+\begin{itemize}
+	\item \textit{transparencia}: máscara utilizada para borrar la componente de transparencia del píxel, la misma fue luego arreglada al terminar el ciclo usando la máscara \textit{fix}.
+	\item \textit{green}: máscara utilizada para extraer la componente G del píxel, ya que es la única componente que duplica su valor al calcularse el brillo.
+	\item \textit{fix}: máscara utilizada para fijar el valor de las transparencias de los píxeles al valor de 255.
+\end{itemize} 
+\justify
+Previo a comenzar el ciclo, dichas máscaras fueron guardadas en los registros \textit{xmm15, xmm14 y xmm9}, respectivamente. Además se guardaron el UmbralSup, el UmbralInf, el BrilloSup y el BrilloInf en los registros \textit{xmm13, xmm12, xmm11 y xmm10}. Se realizó el broadcasting necesario en dichos registros y, en el caso de los brillos, se empaquetaron en 8 bits teniendo en cuenta que si el valor era mayor a 255 debía saturarse a ese valor.
+
+La idea principal de este algoritmo es recorrer la imagen levantando de memoria 4 píxeles consecutivos en el registro \textit{xmm4} y utilizando registros auxiliares calcular el brillo de cada píxel y determinar a cuales píxeles se les debe sumar brillo.
+ 
+ %acá va una imagen mostrando el levantamiento de memoria
+ 
+ Más específicamente, en cada iteración del ciclo se realizaron los siguientes pasos:
+ 
+ \begin{enumerate}
+ 	\item \textbf{Cálculo de brillo}\\
+ 	Una vez levantados los 4 píxeles en el registro \textit{xmm4} se elimina la transparencia de estos píxeles usadando la mencionada máscara \textit{transparencia} puesto que el componente A no es necesario en el cálculo de brillo. Para efectuar los cálculos propicios se realiza una copia de los valores de \textit{xmm4} en \textit{xmm3}. Posteriormente, se extraen al registro \textit{xmm2} los componentes G de cada píxel utilizando la mascara \textit{green} y se eliminan los componentes G del registro \textit{xmm3}.
+ 	Para poder realizar el cálculo de brillo correctamente es necesario extender los componentes R, G y B de \textit{byte} a \textit{word} puesto que al realizar las operaciones requeridas los valores resultantes podrían excederse del rango numérico propio del \textit{byte}. Por este motivo los componentes G del \textit{xmm2} son primeramente alineados a \textit{word} y luego multiplicados por 2. Por otro lado, los componentes R y G que se encuentran aún en \textit{xmm3} están alineados ya a \textit{word} por lo que se procede a realizar la suma horizontal de estos dos con el formato de 16 \texit{bits}.
+ 	Por una cuestión de conveniencia, se desempaquetan las sumas de los componentes R y B de los 4 píxeles que se encuentran en la parte baja de \textit{xmm3} transformándolas de \textit{word} a \textit{dword}.  Gracias a que los valores de 2*G  en \textit{xmm2} están alineados a \texit{dword} procedemos a sumar los valores correspondientes a cada píxel en el formato de 32 \textit{bits}. De esta manera se obtiene en el registro \textit{xmm3} los brillos correspondientes a cada pixel pero multiplicados por 4. Simplemente shifteando a derecha dos veces cada \textit{dword} se obtienen finalmente los 4 brillos definidos en la operación: 
+ 	 \begin{equation}
+ 	B = (src[i][j].r + 2 * src[i][j].g + src[i][j].b)/4 
+ 	\end{equation}
+ 	 
+ 
+ 	\item \textbf{Adición de brillo superior}\\
+ 	
+	Una vez calculados los 4 brillos se transfieren al registro \textit{xmm6} donde luego son comparados uno a uno con los valores de umbral superior guardados en \textit{xmm13}. En caso de que un brillo sea mayor al umbral superior, se guarda en \textit{xmm6} en los 32 \textit{bits} correspondientes una máscara con 1s. Caso contrario se guarda en esa posición una máscara con 0s. Con ayuda de estas máscaras y utilizando los valores guardados en \textit{xmm11} se colocan en \textit{xmm6} 4 brillos superiores en los 32 \textit{bits} donde correspondan. Finalmente se suman \textit{byte} a \textit{byte} los registros \textit{xmm4} y \texit{xmm6}.
+ 	
+ 	\item \textbf{Adición de brillo inferior}\\
+ 	
+ 	Para realizar la adición del brillo inferior, se transfieren ahora a \textit{xmm6} los umbrales inferiores guardados en \textit{xmm12} para que luego sean comparados uno a uno con los brillos de cada píxel. De manera análoga a la anterior, en caso de que un umbral inferior sea mayor al brillo se guarda en esa posición una máscara con 1s, y en el caso contrario con 0s. Nuevamente con ayuda de estas máscaras y ahora utilizando los valores de brillo inferior guardados en \textit{xmm13} se colocan en \textit{xmm6} 4 brillos inferiores en los 32 \textit{bits} donde correspondan. Luego se restan \textit{byte} a \textit{byte} los registros \textit{xmm4} y \texit{xmm6}.
+ 	
+ 	En último lugar se arreglan las transparencias de los píxeles con la máscara \textit{fix} y se cargan los 4 pixeles a la imagen Destino.
+ 	    
+ \end{enumerate}
+ 
+	
+\end{itemize}	 
 
 \subsection{Comparación entre implementaciones en ASM y C}
 
