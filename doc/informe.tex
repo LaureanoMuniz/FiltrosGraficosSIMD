@@ -21,6 +21,7 @@
 \usepackage{graphicx}
 %\usepackage{makeidx}
 \usepackage{paralist} %itemize inline
+\usepackage{subcaption}
 
 
 %\usepackage{float}
@@ -239,18 +240,17 @@ Nuevamente se definieron en primer lugar las máscaras a utilizar en la operator
 \end{itemize} 
 \justify
 Previo a comenzar el ciclo, dichas máscaras fueron guardadas en los registros \textit{xmm15, xmm14 y xmm9}, respectivamente. Además se guardaron el UmbralSup, el UmbralInf, el BrilloSup y el BrilloInf en los registros \textit{xmm13, xmm12, xmm11 y xmm10}. Se realizó el broadcasting necesario en dichos registros y, en el caso de los brillos, se empaquetaron en 8 bits teniendo en cuenta que si el valor era mayor a 255 debía saturarse a ese valor.
-
+\justify
 La idea principal de este algoritmo es recorrer la imagen levantando de memoria 4 píxeles consecutivos en el registro \textit{xmm4} y utilizando registros auxiliares calcular el brillo de cada píxel y determinar a cuales píxeles se les debe sumar brillo.
  
- %acá va una imagen mostrando el levantamiento de memoria
- 
+\justify 
  Más específicamente, en cada iteración del ciclo se realizaron los siguientes pasos:
  
  \begin{enumerate}
  	\item \textbf{Cálculo de brillo}\\
  	Una vez levantados los 4 píxeles en el registro \textit{xmm4} se elimina la transparencia de estos píxeles usadando la mencionada máscara \textit{transparencia} puesto que el componente A no es necesario en el cálculo de brillo. Para efectuar los cálculos propicios se realiza una copia de los valores de \textit{xmm4} en \textit{xmm3}. Posteriormente, se extraen al registro \textit{xmm2} los componentes G de cada píxel utilizando la mascara \textit{green} y se eliminan los componentes G del registro \textit{xmm3}.
- 	Para poder realizar el cálculo de brillo correctamente es necesario extender los componentes R, G y B de \textit{byte} a \textit{word} puesto que al realizar las operaciones requeridas los valores resultantes podrían excederse del rango numérico propio del \textit{byte}. Por este motivo los componentes G del \textit{xmm2} son primeramente alineados a \textit{word} y luego multiplicados por 2. Por otro lado, los componentes R y G que se encuentran aún en \textit{xmm3} están alineados ya a \textit{word} por lo que se procede a realizar la suma horizontal de estos dos con el formato de 16 \texit{bits}.
- 	Por una cuestión de conveniencia, se desempaquetan las sumas de los componentes R y B de los 4 píxeles que se encuentran en la parte baja de \textit{xmm3} transformándolas de \textit{word} a \textit{dword}.  Gracias a que los valores de 2*G  en \textit{xmm2} están alineados a \texit{dword} procedemos a sumar los valores correspondientes a cada píxel en el formato de 32 \textit{bits}. De esta manera se obtiene en el registro \textit{xmm3} los brillos correspondientes a cada pixel pero multiplicados por 4. Simplemente shifteando a derecha dos veces cada \textit{dword} se obtienen finalmente los 4 brillos definidos en la operación: 
+ 	Para poder realizar el cálculo de brillo correctamente es necesario extender los componentes R, G y B de \textit{byte} a \textit{word} puesto que al realizar las operaciones requeridas los valores resultantes podrían excederse del rango numérico propio del \textit{byte}. Por este motivo los componentes G del \textit{xmm2} son primeramente alineados a \textit{word} y luego multiplicados por 2. Por otro lado, los componentes R y G que se encuentran aún en \textit{xmm3} están alineados ya a \textit{word} por lo que se procede a realizar la suma horizontal de estos dos con el formato de 16 \textit{bits}.
+ 	Por una cuestión de conveniencia, se desempaquetan las sumas de los componentes R y B de los 4 píxeles que se encuentran en la parte baja de \textit{xmm3} transformándolas de \textit{word} a \textit{dword}.  Gracias a que los valores de 2*G  en \textit{xmm2} están alineados a \textit{dword} se procede a sumar los valores correspondientes a cada píxel en el formato de 32 \textit{bits}. De esta manera se obtiene en el registro \textit{xmm3} los brillos correspondientes a cada pixel pero multiplicados por 4. Simplemente shifteando a derecha dos veces cada \textit{dword} se obtienen finalmente los 4 brillos definidos en la operación: 
  	 \begin{equation}
  	B = (src[i][j].r + 2 * src[i][j].g + src[i][j].b)/4 
  	\end{equation}
@@ -258,22 +258,184 @@ La idea principal de este algoritmo es recorrer la imagen levantando de memoria 
  
  	\item \textbf{Adición de brillo superior}\\
  	
-	Una vez calculados los 4 brillos se transfieren al registro \textit{xmm6} donde luego son comparados uno a uno con los valores de umbral superior guardados en \textit{xmm13}. En caso de que un brillo sea mayor al umbral superior, se guarda en \textit{xmm6} en los 32 \textit{bits} correspondientes una máscara con 1s. Caso contrario se guarda en esa posición una máscara con 0s. Con ayuda de estas máscaras y utilizando los valores guardados en \textit{xmm11} se colocan en \textit{xmm6} 4 brillos superiores en los 32 \textit{bits} donde correspondan. Finalmente se suman \textit{byte} a \textit{byte} los registros \textit{xmm4} y \texit{xmm6}.
+	Una vez calculados los 4 brillos se transfieren al registro \textit{xmm6}, donde luego son comparados uno a uno con los valores de umbral superior, guardados en \textit{xmm13}. En caso de que un brillo sea mayor al umbral superior, se guarda en \textit{xmm6} en los 32 \textit{bits} correspondientes una máscara con 1s. Caso contrario se guarda en esa posición una máscara con 0s. Con ayuda de estas máscaras y utilizando los valores guardados en \textit{xmm11} se colocan en \textit{xmm6} 4 brillos superiores en los 32 \textit{bits} donde correspondan. Finalmente se suman \textit{byte} a \textit{byte} los registros \textit{xmm4} y \textit{xmm6}.
  	
  	\item \textbf{Adición de brillo inferior}\\
  	
- 	Para realizar la adición del brillo inferior, se transfieren ahora a \textit{xmm6} los umbrales inferiores guardados en \textit{xmm12} para que luego sean comparados uno a uno con los brillos de cada píxel. De manera análoga a la anterior, en caso de que un umbral inferior sea mayor al brillo se guarda en esa posición una máscara con 1s, y en el caso contrario con 0s. Nuevamente con ayuda de estas máscaras y ahora utilizando los valores de brillo inferior guardados en \textit{xmm13} se colocan en \textit{xmm6} 4 brillos inferiores en los 32 \textit{bits} donde correspondan. Luego se restan \textit{byte} a \textit{byte} los registros \textit{xmm4} y \texit{xmm6}.
+ 	Para realizar la adición del brillo inferior, se transfieren ahora a \textit{xmm6} los umbrales inferiores guardados en \textit{xmm12} para que luego sean comparados uno a uno con los brillos de cada píxel. De manera análoga a la anterior, en caso de que un umbral inferior sea mayor al brillo se guarda en esa posición una máscara con 1s, y en el caso contrario con 0s. Nuevamente con ayuda de estas máscaras y ahora utilizando los valores de brillo inferior guardados en \textit{xmm13} se colocan en \textit{xmm6} 4 brillos inferiores en los 32 \textit{bits} donde correspondan. Luego se restan \textit{byte} a \textit{byte} los registros \textit{xmm4} y \textit{xmm6}.
  	
  	En último lugar se arreglan las transparencias de los píxeles con la máscara \textit{fix} y se cargan los 4 pixeles a la imagen Destino.
  	    
  \end{enumerate}
- 
-	
-\end{itemize}	 
+
 
 \subsection{Comparación entre implementaciones en ASM y C}
+\subsubsection{Objetivo}
+\justify
+El propósito de esta sección es comparar cada una de las implementaciones de los filtros codificadas en lenguaje ensamblador contra las implementaciones en C, provistas por la cátedra. La comparación realizada está centrada en el rendimiento de las implementaciones en ambos lenguajes, en función de los tamaños de las imágenes. Para el caso de las implementaciones en C, se compara el rendimiento utilizando las distintas opciones de optimización del código. 
+\justify
+La forma de medir el rendimiento se realizó mediante la toma de tiempos de ejecución, utilizando el \textit{Time Stamp Counter (TSC)}, registro del procesador que cuenta el número de ciclos del mismo y permite así calcular la cantidad de ciclos de ejecución de un filtro, a partir de la diferencia entre los contadores previos y posteriores a la llamada de la función del mismo. 
+\justify
+Dado que el registro TSC se ve afectado por diversos factores (\textit{scheduling}, estado del procesador, etc), el tiempo de ejecución medido no siempre es el mismo, ni es exacto, por lo que fue necesario definir un protocolo de toma de mediciones, con el objetivo de reducir el \textit{ruido} que producen esos factores en la medición y poder obtener una muestra representativa del tiempo de ejecución. El mismo consistió en reducir al mínimo la cantidad de programas ejecutándose al momento de tomar las mediciones, y tomar muestras con gran cantidad de datos (200 repeticiones), a las que luego se les eliminaron los \textit{outliers}.
+\justify
+
+\subsubsection{Metodología}
+\justify
+Las mediciones fueron tomadas en una computadora con las siguientes especificaciones: procesador Ryzen 5 3600 y RAM de 2x8gb Corsair corriendo a 3200mhz.
+
+\justify
+Para la comparación de rendimiento a un tamaño fijo de imagen (1280x720), se tomaron 5 muestras de 200 datos para cada filtro (Imagen Fantasma, Color Bordes y Reforzar Brillo), correspondientes a la implementación en ASM y a la implementación en C compilada bajo los siguientes casos:
+\begin{enumerate}
+	\item Caso 1: Implementación en C usando la optimización del compilador \textbf{-O0}.
+	\item Caso 2: Implementación en C usando la optimización del compilador \textbf{-O1}.
+	\item Caso 3: Implementación en C usando la optimización del compilador \textbf{-O2}.
+	\item Caso 4: Implementación en C usando la optimización del compilador \textbf{-O3}.
+\end{enumerate}
+
+\justify
+Para la comparación de rendimiento en función del tamaño de las imágenes, se tomaron 7 muestras de 200 datos para las implementaciones de ASM y de C-O3(que se hipotetiza que es la más eficiente), de los siguientes tamaños:
+\begin{enumerate}
+	\item  Tamaño de imagen 1: 32x16
+	\item  Tamaño de imagen 2: 64x32
+	\item  Tamaño de imagen 3: 128x64
+	\item  Tamaño de imagen 4: 256x128  
+	\item  Tamaño de imagen 5: 512x256
+	\item  Tamaño de imagen 6: 1024x512
+	\item  Tamaño de imagen 7: 2048x1024
+\end{enumerate}
+
+\justify	
+Para eliminar los \textit{outliers}, a cada muestra se le calculó su media alfa-podada a ambos extremos, eliminando 20 valores. De esta manera se obtuvieron muestras más representativas del "valor real" del tiempo de ejecución de cada implementación.
+
+\justify 
+Además, se calculó el desvío estándar de cada muestra, para obtener un valor que sirva para comparar la dispersión de los datos. Con los datos de la media y del desvío estándar se confeccion
+
+\justify 
+Finalmente, a partir de las mediciones se confeccionaron gráficos para condensar la información obtenida en la toma de datos.\\
+
+\justify 
+\subsubsection{Resultados}
+
+\justify 
+A continuación se presentan los resultados de la comparación de las implementaciones en ASM, C con optimización -O0, C con optimización -O1, C con optimización -O2 y C con optimización -O3, para todos los filtros.
+\justify 
+Seguidamente, se presentan los resultados de la comparación de rendimiento en función de los tamaños de las imágenes, para ASM y C con optimización -O3.\\ 
+
+\justify 
+\begin{center}
+\textbf{Comparación de rendimiento para Imagen Fantasma}	
+\end{center}
+
+\begin{flushleft}
+	\includegraphics[scale=0.55]{img/ImagenFantasmaConTabla.pdf}
+\end{flushleft}	
+
+
+\justify 
+\begin{center}
+	\textbf{Comparación de rendimiento para Color Bordes}
+\end{center}
+
+\begin{flushleft}
+	\includegraphics[scale=0.55]{img/ColorBordesConTabla.pdf}
+\end{flushleft}	
+
+
+\justify 
+\begin{center}
+	\textbf{Comparación de rendimiento para Reforzar Brillo}
+\end{center}
+\justify 
+\begin{flushleft}
+	\includegraphics[scale=0.55]{img/ReforzarBrilloConTabla.pdf}
+\end{flushleft}
+
+
+\newpage
+
+\justify 
+\begin{center}
+	\textbf{Comparación de rendimiento en función del tamaño para Imagen Fantasma}	
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{img/ImagenFantasmaO3vsASM.pdf}
+\end{center}	
+
+
+\justify 
+\begin{center}
+	\textbf{Comparación de rendimiento en función del tamaño para Color Bordes}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.6]{img/ColorBordesO3vsASM.pdf}
+\end{center}	
+
+
+
+\justify 
+\begin{center}
+	\textbf{Comparación de rendimiento en función del tamaño para Reforzar Brillo}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.60]{img/ReforzarBrilloO3vsASM.pdf}
+\end{center}
+
+
+\subsubsection{Conclusiones}
+\justify 
+En un primer lugar, a partir de los resultados de la comparación de rendimiento entre ASM y C, se puede concluir a simple vista que el rendimiento de la implementación en ASM es mucho mayor que el rendimiento de C, sin importar la optimización del código. En todos los casos, el tiempo de ejecución de la implementación en ASM es menor al 10\% del tiempo de ejecución de la implementación en C. Dentro de las distintas optimizaciones de C, se percibe una notable diferencia entre la optimización O0 y el resto, siendo esta la menos eficiente de las cuatro. Dentro de las tres optimizaciones restantes (O1, O2 y O3), no se observan diferencias significativas en ninguno de los tres filtros, aunque sí puede remarcarse una leve diferencia entre O2 y O3 en el filtro de \textit{<<Color Bordes>>}.
+\justify 
+Por otro lado, en el caso de la comparación de rendimiento en función del tamaño, nuevamente se observa una gran diferencia de rendimiento entre ambos lenguajes, concluyendose también que la implementación en ASM la mejor. Para todos los casos la gráfica es similar: la curva de C es una función decreciente que se estanca a partir del tamaño de 1024x512 píxeles y la curva de ASM es una función levemente decreciente que también se estanca en los mismos valores. En cuanto a las barras de error, se percibe una gran diferencia de tamaño de las mismas en la curva de ASM respecto a la de C. Se cree que esto podría deberse a que la implementación de C posee más \texit{ruido}, por tener un tiempo de ejecución mucho mayor. A su vez, a partir del valor en que las curvas se estancan, las barras de error ya no son distinguibles en el gráfico, por lo que su valor no es comparable con los demás, esto podría deberse a que a un tamaño grande de imagen el ruido ya no es significativo. De todas formas, los resultados no son suficientes para obtener una conclusión con respecto a este tema.
+\justify En conclusión, la implementación en lenguaje ensamblador es mucho más eficiente que la implementacion en C, sin importar la optimización usada. Además, la implementación en C parece mejorar a tamaños mayores de imagenes, aunque sigue sin alcanzar a ASM.
+
+      
 
 \subsection{Diseño experimental}
+
+\subsubsection{Experimento 1: Int vs Float para el filtro Imagen Fantasma}
+
+\justify
+\textbf{Objetivos e hipótesis}
+\justify
+El siguiente experimento está inspirado en las siguientes preguntas:
+\justify
+\begin{enumerate}
+	\item \textit{¿Hay diferencias entre operar con enteros o punto flotante? ¿La imagen final tiene diferencias significativas?}
+	\item \textit{¿Cuál implementación es “mejor”?}
+	\item \textit{¿Existe alguna relación de ganancia en rendimiento a cambio de pérdida de precisión?}
+\end{enumerate}
+\justify
+Durante el desarrollo de este trabajo práctico se realizaron dos implementaciones distintas para el filtro de \textit{<<Imagen Fantasma>>}: una que procesa los datos como enteros, detallada anteriormente en la sección \textit{2.1.1}, y otra que procesa los datos como números flotantes de 32 bits (precisión simple). La implementación con \textit{int} levanta y procesa simultáneamente dos píxeles de memoria, mientras que la otra implementación levanta 4 pixeles en 4 accesos a memoria, y no procesa ninguno de manera simultánea. La idea de este experimento es comparar el rendimiento y la pérdida de precisión (si es que la hay) de ambas implementaciones y formular una relación entre ambas, poniendo a prueba la siguiente hipótesis:
+
+\justify
+\textit{Para un mismo tamaño de imagen, el rendimiento de la implementación en enteros será mayor que el de la implementación en números flotantes, dado que procesa más píxeles en simúltaneo y realiza menos accesos a memoria. Además, la pérdida de precisión no será significativa en relación al aumento del rendimiento.}   
+
+\justify
+\textbf{Metodología}
+\justify
+
+
+\justify
+
+
+\subsubsection{Experimento 2: Rendimiento en función de la cantidad de accesos a memoria y píxeles procesados para el filtro Reforzar Brillo}
+
+\justify
+\textbf{Objetivos e hipótesis}
+\justify
+Este experimento está inspirado en las siguientes preguntas:
+\justify
+\begin{enumerate}
+	\item \textit{¿Cuál es la cantidad de pixeles procesados en cada implementación? ¿Y de accesos a memoria? ¿Se condice empíricamente esta diferencia en la performance de los filtros?}
+	\item \textit{¿Cuál implementación es “mejor”?}\\
+	 
+\end{enumerate}
+
+\textbf{Metodología}\\
+
 
 
 
