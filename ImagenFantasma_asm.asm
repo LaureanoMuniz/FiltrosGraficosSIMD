@@ -35,7 +35,7 @@ ImagenFantasma_asm:
                             ; edx = offset_y en bytes (parte alta)
     ; combino edx con eax                        
     mov eax, eax ; limpio parte alta
-    shl rdx, 4   
+    shl rdx, 32   
     mov r9, rax  ; r9 = offset_y en bytes (parte baja)
     add r9, rdx  ; r9 = offset_y en bytes 
     add r9, rdi  ; r9 = rdi + offset_y en bytes = offset_jj
