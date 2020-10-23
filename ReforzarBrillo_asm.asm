@@ -74,7 +74,7 @@ ReforzarBrillo_asm:
             movdqu xmm6, xmm12      ; xmm6 = [ui,ui,ui,ui]
             pcmpgtd xmm6, xmm3      ; comparo los brillos inferiores contra los brillos en xmm0. Si el umbral inf es superior a un brillo de xmm0 se guarda en su posicion 0xFFFFFFFF, si no se guardan 0x00000000.
             pand xmm6, xmm10        ; En las posiciones donde el brillo es menor al umbral coloco 16 brillos inferiores a restar.
-            psubusb xmm4, xmm6       ; xmm4 = [0-x,r3-x,g3-x,b3-x,0-x,r2-x,g2-x,b2-x,0-x,r1-x,g1-x,b1-x,0-x,r0-x,g0-x,b0-x] x es 0 o binf dependiendo de si es inferior al brillo umbral inferior.
+            psubusb xmm4, xmm6       ; xmm4 = [0+x-y,r3+x-y,g3+x-y,b3+x-y,0+x-y,r2+x-y,g2+x-y,b2+x-y,0+x-y,r1+x-y,g1+x-y,b1+x-y,0+x-y,r0+x-y,g0+x-y,b0+x-y] y es 0 o binf dependiendo de si es inferior al brillo umbral inferior.
            
 
             paddusb xmm4,xmm9       ; arreglo la transparencia saturandola a 255.
