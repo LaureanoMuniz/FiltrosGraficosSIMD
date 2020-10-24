@@ -327,36 +327,21 @@ Para la comparación de rendimiento a un tamaño fijo de imagen (1280x720), se t
 \end{enumerate}
 
 \justify
-Para la comparación de rendimiento en función del tamaño de las imágenes, se tomaron 7 muestras de 200 datos para las implementaciones de ASM y de C-O3(que se hipotetiza que es la más eficiente), de los siguientes tamaños:
-\begin{enumerate}
-	\item  Tamaño de imagen 1: 32x16
-	\item  Tamaño de imagen 2: 64x32
-	\item  Tamaño de imagen 3: 128x64
-	\item  Tamaño de imagen 4: 256x128  
-	\item  Tamaño de imagen 5: 512x256
-	\item  Tamaño de imagen 6: 1024x512
-	\item  Tamaño de imagen 7: 2048x1024
-\end{enumerate}
-
+Para la comparación de rendimiento en función del tamaño de las imágenes, se tomaron 7 muestras de 200 datos para las implementaciones de ASM y de C-O3(que se hipotetiza que es la más eficiente), de los siguientes tamaños: [32x16, 64x32, 128x64, 256x128, 512x256, 1024x512, 2048x1024].
 \justify	
 Para eliminar los \textit{outliers}, a cada muestra se le calculó su media alfa-podada a ambos extremos, eliminando 40 valores. De esta manera se obtuvieron muestras más representativas del "valor real" \ del tiempo de ejecución de cada implementación.
-
 \justify 
 Además, se calculó el desvío estándar de cada muestra, para obtener un valor que sirva para comparar la dispersión de los datos. Con los datos de la media y del desvío estándar se confeccionaron tablas que se encuentran en el anexo.
-
 \justify 
-Finalmente, a partir de las mediciones se confeccionaron gráficos para condensar la información obtenida en la toma de datos.\\
-
-\justify 
+Finalmente, a partir de las mediciones se confeccionaron gráficos para condensar la información obtenida en la toma de datos.
 \subsubsection{Resultados}
 
 \justify 
 A continuación se presentan los resultados de la comparación de las implementaciones en ASM, C con optimización -O0, C con optimización -O1, C con optimización -O2 y C con optimización -O3, para todos los filtros.
-\justify 
 Seguidamente, se presentan los resultados de la comparación de rendimiento en función de los tamaños de las imágenes, para ASM y C con optimización -O3.\\ 
 
 \begin{figure}[h!]
-	\includegraphics[scale=0.55]{img/ImagenFantasmaConTabla.pdf}
+	\includegraphics[scale=0.5]{img/ImagenFantasmaConTabla.pdf}
 	\caption{Gráfico de barras de rendimiento de las implementaciones de Imagen Fantasma.}
 \end{figure}	
 
@@ -374,28 +359,24 @@ Seguidamente, se presentan los resultados de la comparación de rendimiento en f
 \end{figure}
 
 
-
 \begin{figure}[h!]
-	\centering
-	\includegraphics[scale=0.56]{img/ImagenFantasmaO3vsASM.pdf}
-	\caption{Comparación de rendimiento en función del tamaño del filtro Imagen Fantasma}
+		\centering
+		\includegraphics[scale= 0.55]{img/ImagenFantasmaO3vsASM.pdf}
+		\caption{Comparación de rendimiento en función del tamaño del filtro Color Bordes}
 \end{figure}	
 
-
-\begin{figure}[h!]
+\begin{figure}{h!}
 	\centering
-	\includegraphics[scale=0.56]{img/ColorBordesO3vsASM.pdf}
-	\caption{Comparación de rendimiento en función del tamaño del filtro Color Bordes}
-\end{figure}	
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[scale=0.56]{img/ReforzarBrilloO3vsASM.pdf}
+	\includegraphics[scale= 0.55]{img/ColorBordesO3vsASM.pdf}
 	\caption{Comparación de rendimiento en función del tamaño del filtro Reforzar Brillo}
 \end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale = 0.55]{img/ReforzarBrilloO3vsASM.pdf}
+	\caption{Comparación de rendimiento en función del tamaño del filtro Imagen Fantasma}
+\end{figure}
 
-
+\newpage
 \subsubsection{Conclusiones}
 \justify 
 En un primer lugar, a partir de los resultados de la comparación de rendimiento entre ASM y C, se puede concluir a simple vista que el rendimiento de la implementación en ASM es mucho mayor que el rendimiento de C, sin importar la optimización del código. En todos los casos, el tiempo de ejecución de la implementación en ASM es menor al 10\% del tiempo de ejecución de la implementación en C. Dentro de las distintas optimizaciones de C, se percibe una notable diferencia entre la optimización O0 y el resto, siendo esta la menos eficiente de las cuatro. Dentro de las tres optimizaciones restantes (O1, O2 y O3), no se observan diferencias significativas en ninguno de los tres filtros, aunque sí puede remarcarse una leve diferencia entre O2 y O3 en el filtro de \textit{<<Color Bordes>>}.
@@ -413,17 +394,16 @@ Por otro lado, en el caso de la comparación de rendimiento en función del tama
 \justify
 El siguiente experimento está inspirado en las siguientes preguntas:
 \justify
-\begin{enumerate}
-	\item \textit{¿Hay diferencias entre operar con enteros o punto flotante? ¿La imagen final tiene diferencias significativas?}
-	\item \textit{¿Cuál implementación es “mejor”?}
-	\item \textit{¿Existe alguna relación de ganancia en rendimiento a cambio de pérdida de precisión?}
-\end{enumerate}
+\textit{¿Hay diferencias entre operar con enteros o punto flotante? ¿La imagen final tiene diferencias significativas?} \textit{¿Cuál implementación es “mejor”?} \textit{¿Existe alguna relación de ganancia en rendimiento a cambio de pérdida de precisión?}
 
 \justify
-Durante el desarrollo de este trabajo práctico se realizaron dos implementaciones distintas para el filtro de \textit{<<Imagen Fantasma>>}: una que procesa los datos como enteros, detallada anteriormente en la sección \textit{2.1.1}, y otra que procesa los datos como números flotantes de 32 bits (precisión simple). La implementación con \textit{int} levanta cuatro pixeles en dos accesos a memoria y procesa simultáneamente dos píxeles, mientras que la otra implementación levanta cuatro pixeles en cuatro accesos a memoria, y no procesa ninguno de manera simultánea. La idea de este experimento es comparar el rendimiento y la pérdida de precisión (si es que la hay) de ambas implementaciones y formular una relación entre ambas, poniendo a prueba la siguiente hipótesis:
+Durante el desarrollo de este trabajo práctico se realizaron dos implementaciones distintas para el filtro de \textit{<<Imagen Fantasma>>}: una que procesa los datos como enteros, detallada anteriormente en la sección \textit{2.1.1}, y otra que procesa los datos como números flotantes de 32 bits (precisión simple). La implementación con \textit{int} levanta cuatro pixeles en dos accesos a memoria y procesa simultáneamente dos píxeles, mientras que la otra implementación levanta cuatro pixeles en cuatro accesos a memoria, y no procesa ninguno de manera simultánea. Además, en la implementación con floats se levanta cada pixel en un registro \textit{xmm} extendiendo con ceros a dwords, y luego se convierten a floats usando las operaciones de conversión. La operatoria para el cálculo de brillo es similar a la implementación en enteros, pero ahora usando operaciones de floats y, por ende, la máscara de multiplicar es distinta y se precisa de una nueva máscara para dividir. Al final se los convierte a enteros, nuevamente usando operaciones de conversión.
+\justify
+La idea de este experimento es comparar el rendimiento y la pérdida de precisión (si es que la hay) de ambas implementaciones y formular una relación entre ambas, poniendo a prueba la siguiente hipótesis:
 
 \justify
-\textit{Para un mismo tamaño de imagen, el rendimiento de la implementación en enteros será mayor que el de la implementación en números flotantes, dado que procesa más píxeles en simúltaneo y realiza menos accesos a memoria. Para las imágenes con mayor cantidad de píxeles con brillo alto, se perderá menos precisión ya que estos se saturarán. Asimismo, para las imágenes con mayor cantidad de píxeles con brillo bajo, se perderá precisión, pero está pérdida será de a lo sumo una unidad por componente en la mayoría de los casos. En cambio, en las imágenes de brillo medio, la pérdida será mayor que las anteriores. Sin embargo, esta pérdida de precisión no será significativa en relación al aumento del rendimiento, en ninguno de los casos.}   
+\textit{Para un mismo tamaño de imagen, el rendimiento de la implementación en enteros será mayor que el de la implementación en números flotantes, dado que procesa más píxeles en simúltaneo y realiza menos accesos a memoria. Para las imágenes con mayor cantidad de píxeles con brillo alto, se perderá menos precisión ya que estos se saturarán. Asimismo, para las imágenes con mayor cantidad de píxeles con brillo bajo, se perderá precisión, pero está pérdida será de a lo sumo una unidad por componente en la mayoría de los casos. En cambio, en las imágenes de brillo medio, la pérdida será mayor que las anteriores. Sin embargo, esta pérdida de precisión no será significativa en relación al aumento del rendimiento, en ninguno de los casos.}\\
+\justify   
 \begin{figure}[h]
 	\centering
 	\begin{subfigure}[b]{0.3 \textwidth}
@@ -442,7 +422,6 @@ Durante el desarrollo de este trabajo práctico se realizaron dos implementacion
 	\end{subfigure}
 	\caption{Imagenes utilizadas para el experimento}
 \end{figure}
-
 \newpage
 \justify
 \textbf{Metodología}
@@ -460,10 +439,7 @@ Antes de comenzar con los experimentos, se convirtió el formato de las imagenes
 \justify
 Para comparar el rendimiento, se realizó el mismo procedimiento que en la comparación de C vs ASM, en este caso tomando 3 muestras de 200 valores cada una, correspondientes a cada caso de brillo, para ambas implementaciones del filtro \textit{<<Imagen Fantasma>>}. 
 \justify
-En la comparación de precisión se utilizó el \textit{bmpdiff}. Para cada caso de brillo se generó una imagen con el filtro \textit{<<Imagen Fantasma>>}  y una imagen utilizando la implemetación en C de la cátedra. Luego, se comparó cada imagen usando el \textit{bmpdiff} contando la cantidad de componentes que diferían en a lo sumo 2 unidades de la implementación en C. El valor obtenido hace referencia a la cantidad de componentes que pierden precisión.
-\justify
-Realizando este método se registraron la cantidad de componentes que 
-no pierden precisión, que pierden una unidad de precisión y que pierden dos unidades de precisión, para cada caso.
+En la comparación de precisión se utilizó el \textit{bmpdiff}. Para cada caso de brillo se generó una imagen con el filtro \textit{<<Imagen Fantasma>>}  y una imagen utilizando la implemetación en C de la cátedra. Luego, se comparó cada imagen usando el \textit{bmpdiff} contando la cantidad de componentes que diferían en a lo sumo 2 unidades de la implementación en C. El valor obtenido hace referencia a la cantidad de componentes que pierden precisión. Realizando este método se registraron la cantidad de componentes que no pierden precisión, que pierden una unidad de precisión y que pierden dos unidades de precisión, para cada caso.
 
 \subsubsection{Experimento 2: Rendimiento en función de la cantidad de accesos a memoria y píxeles procesados para el filtro Reforzar Brillo}
 
@@ -472,30 +448,26 @@ no pierden precisión, que pierden una unidad de precisión y que pierden dos un
 \justify
 Este experimento está inspirado en las siguientes preguntas:
 \justify
-\begin{enumerate}
-	\item \textit{¿Cuál es la cantidad de pixeles procesados en cada implementación? ¿Y de accesos a memoria? ¿Se condice empíricamente esta diferencia en la performance de los filtros?}
-	\item \textit{¿Cuál implementación es “mejor”?}	 
-\end{enumerate}
+\textit{¿Cuál es la cantidad de pixeles procesados en cada implementación? ¿Y de accesos a memoria? ¿Se condice empíricamente esta diferencia en la performance de los filtros?} \textit{¿Cuál implementación es “mejor”?}	 
 \justify
-El objetivo detrás de este experimento es evaluar el rendimiento en función de la cantidad de píxeles procesados y accesos a memoria, utilizando dos implementaciones realizadas para el filtro de \textit{<<Reforzar Brillo>>} que difieren en estas dos métricas. La primera implementación levanta y procesa dos píxeles en simultáneo, mientras que la segunda implementación levanta y procesa cuatro píxeles, también en simultáneo. El experimento realizado busca poner a prueba la siguiente hipótesis:
+El objetivo detrás de este experimento es evaluar el rendimiento en función de la cantidad de píxeles procesados y accesos a memoria, utilizando dos implementaciones realizadas para el filtro de \textit{<<Reforzar Brillo>>} que difieren en estas dos métricas. La primera implementación levanta y procesa dos píxeles en simultáneo, mientras que la segunda implementación levanta y procesa cuatro píxeles, también en simultáneo y está descripta más arriba. La diferencia entre ambos se encuentra principalmente en que en la primera implementación se opera con \textit{words} en vez de \textit{bytes} y que el cálculo de brillo para los cuatro píxeles se realiza por separado, de a pares. El experimento realizado busca poner a prueba la siguiente hipótesis:
 \justify
 \textit{La implementación que realiza menor cantidad de accesos a memoria y procesa mayor cantidad de píxeles en simultáneo es la más eficiente en términos de tiempo de ejecución. El rendimiento de la segunda implementación(cuatro píxeles en simultáneo) será de al menos el doble que el rendimiento de la primera(dos píxeles en simultáneo). }
 
 \justify
 \textbf{Metodología}
 \justify
-Se realizó una comparación de rendimiento similar a la realizada en el los experimentos anteriores, aplicando las implementaciones del filtro \textit{<<Reforzar Brillo>>} a la imagen \textit{<<SweetNovember>>} con los siguientes tamaños: [32x16, 64x32, 128x64, 256x128, 512x256, 1024x512, 2048x1024, 4096x2048]. Para cada tamaño de imagen se tomaron los datos con ambas implementaciones, siguiendo el mismo protocolo de toma de mediciones y eliminación de \textit{outliers} que se detalló en las secciones anteriores.
-
-
-
+Se realizó una comparación de rendimiento similar a la realizada en el los experimentos anteriores, aplicando las implementaciones del filtro \textit{<<Reforzar Brillo>>} a la imagen \textit{<<SweetNovember>>} con los siguientes tamaños: [32x16, 64x32, 128x64, 256x128, 512x256, 1024x512, 2048x1024, 4096x2048]. 
+\justify
+Para cada tamaño de imagen se tomaron los datos con ambas implementaciones, siguiendo el mismo protocolo de toma de mediciones y eliminación de \textit{outliers} que se detalló en las secciones anteriores.
 
 \section{Resultados}
 \subsection{Experimento 1}
 
 \justify
-Los gráficos presentados a continuación reflejan los resultados de la comparación de pérdida de precisión entre las tres imagenes utilizadas, para el algoritmo de \textit{<<Imagen Fantasma>>} que realiza las operaciones con números enteros. En cuanto a la implementación en floats, no se observó pérdida de precisión para ninguno de los tres casos de brillo.
+Los gráficos de la Figura 18 reflejan los resultados de la comparación de pérdida de precisión entre las tres imagenes utilizadas, para el algoritmo de \textit{<<Imagen Fantasma>>} que realiza las operaciones con números enteros. En cuanto a la implementación en floats, no se observó pérdida de precisión para ninguno de los tres casos de brillo.
  
-\begin{figure}[h]
+\begin{figure}[b!]
 	\centering
 	\begin{subfigure}{0.49 \textwidth}
 		\includegraphics[width=\textwidth]{img/Precision0.pdf}
@@ -506,19 +478,21 @@ Los gráficos presentados a continuación reflejan los resultados de la comparac
 		\includegraphics[width=\textwidth]{img/Precision1.pdf}
 		\caption{Comparación de cantidad de componentes que pierden una unidad precisión}
 	\end{subfigure}
-	\centering
 	\begin{subfigure}{0.49 \textwidth}
+		\centering
 		\includegraphics[width=\textwidth]{img/Precision2.pdf}
 		\caption{Comparación de cantidad de componentes que pierden dos unidades precisión.}
 	\end{subfigure}
-	\caption{Graficos de barras de comparación int vs Float}
-\end{figure}
+	\caption{Comparación de precisión.}
+	\end{figure}
+
+
 \justify
 Se observa una marcada diferencia entre los tres tipos de brillo para los casos de las componentes que pierden precisión. La pérdida de precisión por una unidad predomina en las imágenes de brillo bajo y medio, mientras que la pérdida de precisión por dos unidades predomina solo en las imágenes de brillo medio, siendo los valores mucho más pequeños que en el caso anterior.
 \justify
 Para el caso en el que las componentes mantienen la precisión, no se observan diferencias muy marcadas, pero sí se puede distinguir que las que menos pierden precisión pertenecen a la imagen de brillo alto, seguidas por las de brillo bajo. La pérdida de precisión por píxel en promedio de los tres tipos de brillos es de: 0.23, 0.31, 0.03 para las imágenes de brillo bajo, medio y alto, respectivamente.
 \justify
-En el siguiente gráfico se presentan los resultados de la comparación de rendimiento entre ambas implementaciones (en enteros y en floats) para cada tipo de brillo. 
+En el gráfico de la Figura 19 se presentan los resultados de la comparación de rendimiento entre ambas implementaciones (en enteros y en floats) para cada tipo de brillo. 
 
 \begin{figure}[h]
 		\centering
@@ -532,14 +506,14 @@ No se observan diferencias significativas en el rendimiento de una misma impleme
 \justify
 En el siguiente gráfico se resumen los resultados de la comparación por rendimiento entre las dos implementaciones de \textit{<<Reforzar Brillo>>}.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[scale=0.55]{img/ReforzarBrillo2vs4.pdf}
 	\caption{Comparación de rendimiento en función del tamaño de la imagen.}
 \end{figure}	
 \justify
 En ambos casos se observa la gráfica de una curva decreciente que se estanca a partir del tamaño 1024x512, similar a lo observado en resultados anteriores, aunque en este caso la curva es más empinada. Además, se puede notar una marcada diferencia entre el rendimiento de ambas implementaciones, siendo la segunda(cuatro píxeles procesados simultáneamente) la mejor y que la razón entre los tiempo de ejecución cuando los tamaños crecen tiende a 0.5. Por último, se puede observar nuevamente la extraña anomalía del desvío estándar que deja de tener valores significativos alrededor del tamaño mencionado anteriormente.
-
+\newpage
 \section{Conclusión}
 \justify
 En primer lugar, a partir de los resultados del experimento \textit{<<Int vs Float para el filtro Imagen Fantasma>>}, se observa que las diferencias  entre operar con enteros y punto flotante residen principalmente en el rendimiento y en la precisión. Se puede concluir efectivamente que la pérdida de precisión no es significativa en ninguno de los dos casos y, en particular, la única implementación que pierde precisión es la de enteros. Esta pérdida es compensada con el hecho de que demora el 56\% de lo que demora la implementación con floats, reflejando una clara mejoría en el rendimiento. Esto coincide sastifactoriamente con la primera parte de nuestra hipótesis, la cual afirma que la implementación en enteros es mejor.
@@ -556,6 +530,7 @@ Durante el transcurso del desarrollo de este informe se nos ocurrieron posibles 
 	\item Modificar las implementaciones hechas sobre ASM, con el fin de evitar la mayor cantidad de \textit{pipelines stalls} y así poder mejorar el tiempo de ejecución.
 	\item Entender por qué ocurre la anomalía de los desvíos estándar cuando el tamaño de la imagen supera el número de $2^{19}$ píxeles.  
 \end{itemize}  
+\newpage
 \section{Anexo}
 \subsection{Tablas de comparación C vs ASM}
 \begin{table}[h!]
